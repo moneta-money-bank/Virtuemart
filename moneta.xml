@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<extension version="2.5" type="plugin" group="vmpayment" method="upgrade" >
+    <name>Moneta</name>
+    <author>Moneta</author>
+	<creationDate>February 03 2020</creationDate>
+    <copyright>Copyright (c) 2020 Moneta. All rights reserved.</copyright>
+    <license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
+    <version>1.0.0</version>
+    <description><![CDATA[Moneta is a popular payment provider and available in many countries. ]]>
+    </description>
+    <files>
+        <filename plugin="moneta">moneta.php</filename>
+        <folder>language</folder>
+		<folder>sdk</folder>
+		<folder>tmpl</folder>
+    </files>
+    <params addpath="/administrator/components/com_virtuemart/elements">
+        <param type="vmjpluginwarning" />
+        <param type="spacer" default="VMPAYMENT_INTELLIGENTPAYMENT_PAYMENT_TITLE" level="level1" />
+        <param type="spacer" default="VMPAYMENT_INTELLIGENTPAYMENT_PAYMENT_WARNING"   />
+        <param type="spacer" default="" level="level1" />
+        <param type="spacer" default="VMPAYMENT_INTELLIGENTPAYMENT_PAYMENT_SETTINGS" level="level1" />
+        <param name="payment_logos" type="vmfiles" label="VMPAYMENT_INTELLIGENTPAYMENT_LOGOS"
+            description="VMPAYMENT_INTELLIGENTPAYMENT_LOGOS_DESC"
+            directory="/images/stories/virtuemart/payment"
+            default="default" hide_default="1" hide_none="1"
+            stripext="0"  exclude="^_" />
+        <param type="spacer" default="" level="level1" />
+        <param   type="spacer" default="VMPAYMENT_INTELLIGENTPAYMENT_PARAMS" level="level1" />
+        <param type="text" name="intelligentpayment_merchant_id"  size="50" label="VMPAYMENT_INTELLIGENTPAYMENT_MERCHANT_ID"
+             default="" description="VMPAYMENT_INTELLIGENTPAYMENT_MERCHANT_ID_DESC" />
+        <param type="text" name="intelligentpayment_api_password"  size="50" label="VMPAYMENT_INTELLIGENTPAYMENT_API_PASSWORD"
+             default="" description="VMPAYMENT_INTELLIGENTPAYMENT_API_PASSWORD_DESC" />
+        <param type="spacer" default="" level="level1" />
+		<param type="text" name="intelligentpayment_brand_id"  size="50" label="VMPAYMENT_INTELLIGENTPAYMENT_BRAND_ID"
+             default="" description="VMPAYMENT_INTELLIGENTPAYMENT_BRAND_ID_DESC" />
+        <param name="tax_id" type="vmtaxes" scope="com_virtuemart"  label="VMPAYMENT_INTELLIGENTPAYMENT_TAX" description="VMPAYMENT_INTELLIGENTPAYMENT_TAX_EXPLAIN" />
+        <param type="spacer" default="" level="level1" />
+        <param name="debug" type="radio" default="0" label="VMPAYMENT_INTELLIGENTPAYMENT_DEBUG" description="VMPAYMENT_INTELLIGENTPAYMENT_DEBUG_DESC" >
+            <option value="0">COM_VIRTUEMART_NO</option>
+            <option value="1">COM_VIRTUEMART_YES</option>
+        </param>
+        <param name="sandbox" type="radio" default="1" label="VMPAYMENT_INTELLIGENTPAYMENT_SANDBOX" description="VMPAYMENT_INTELLIGENTPAYMENT_SANDBOX_DESC" >
+            <option value="0">COM_VIRTUEMART_NO</option>
+            <option value="1">COM_VIRTUEMART_YES</option>
+        </param>
+        <param type="spacer" default="" level="level1" />
+        <param type="spacer" default="VMPAYMENT_INTELLIGENTPAYMENT_PAYMENT_PAGE" level="level1" />
+        <param name="status_pending" type="vmorderstate" scope="com_virtuemart" default="P" label="VMPAYMENT_INTELLIGENTPAYMENT_STATUS_PENDING" description="VMPAYMENT_INTELLIGENTPAYMENT_STATUS_PENDING_EXPLAIN" />
+        <param name="status_success" type="vmorderstate" scope="com_virtuemart" default="C" label="VMPAYMENT_INTELLIGENTPAYMENT_STATUS_SUCCESS" description="VMPAYMENT_INTELLIGENTPAYMENT_STATUS_SUCCESS_EXPLAIN" />
+        <param name="status_canceled" type="vmorderstate" scope="com_virtuemart" default="X" label="VMPAYMENT_INTELLIGENTPAYMENT_STATUS_FAILED" description="VMPAYMENT_INTELLIGENTPAYMENT_STATUS_FAILED_EXPLAIN" />
+        <param name="status_refunded" type="vmorderstate" scope="com_virtuemart" default="R" label="VMPAYMENT_INTELLIGENTPAYMENT_STATUS_REFUNDED" description="VMPAYMENT_INTELLIGENTPAYMENT_STATUS_REFUNDED_EXPLAIN" />
+    </params>
+    <vmconfig>
+        <fields name="params">
+            <fieldset name="payment" addfieldpath="/administrator/components/com_virtuemart/fields">
+
+                <field type="vmtitle" description="" default="VMPAYMENT_INTELLIGENTPAYMENT_PAYMENT_TITLE" />
+                <field name="sandbox" type="radio" default="1" label="VMPAYMENT_INTELLIGENTPAYMENT_SANDBOX" description="VMPAYMENT_INTELLIGENTPAYMENT_SANDBOX_DESC" >
+                    <option value="0">COM_VIRTUEMART_NO</option>
+                    <option value="1">COM_VIRTUEMART_YES</option>
+                </field>
+                <field type="text" name="intelligentpayment_merchant_id"  size="50" label="VMPAYMENT_INTELLIGENTPAYMENT_MERCHANT_ID" default="" description="VMPAYMENT_INTELLIGENTPAYMENT_MERCHANT_ID_DESC" />
+                <field type="text" name="intelligentpayment_api_password"  size="50" label="VMPAYMENT_INTELLIGENTPAYMENT_API_PASSWORD" default="" description="VMPAYMENT_INTELLIGENTPAYMENT_API_PASSWORD_DESC" />
+				<field type="text" name="intelligentpayment_brand_id"  size="50" label="VMPAYMENT_INTELLIGENTPAYMENT_BRAND_ID" default="" description="VMPAYMENT_INTELLIGENTPAYMENT_BRAND_ID_DESC" />
+				<field class="required"  name="ipg_merchat_countries" type="vmcountries"   multiple="true"  label="VMPAYMENT_INTELLIGENTPAYMENT_MERCHANT_COUNTRIES" description="VMPAYMENT_INTELLIGENTPAYMENT_MERCHANT_COUNTRIES_DESC"/>
+
+				
+                <field name="mode" type="list" label="VMPAYMENT_INTELLIGENTPAYMENT_PAYMENT_MODE">
+					
+                    <option value="0">VMPAYMENT_INTELLIGENTPAYMENT_PAYMENT_MODE_REDIRECT</option>
+						
+					
+                	<option value="1">VMPAYMENT_INTELLIGENTPAYMENT_PAYMENT_MODE_IFRAME</option>
+					
+					
+                	<option value="2">VMPAYMENT_INTELLIGENTPAYMENT_PAYMENT_MODE_HOSTED</option>
+					
+                </field>
+								
+
+                <field type="vmtitle" default="VMPAYMENT_INTELLIGENTPAYMENT_PAYMENT_PAGE" level="level1" />
+                                
+                <field name="xtype" type="list" default="AUTH_CAPTURE" label="VMPAYMENT_INTELLIGENTPAYMENT_TRANSACTION_TYPE"
+                       description="VMPAYMENT_INTELLIGENTPAYMENT_TRANSACTION_TYPE_DESC">
+                    <option value="AUTH_CAPTURE">VMPAYMENT_INTELLIGENTPAYMENT_TRANSACTION_TYPE_AUTH_CAPTURE</option>
+                    <option value="AUTH_ONLY">VMPAYMENT_INTELLIGENTPAYMENT_TRANSACTION_TYPE_AUTH_ONLY</option>
+                </field>
+                
+                <field name="status_pending" type="vmorderstate" scope="com_virtuemart" default="P" label="VMPAYMENT_INTELLIGENTPAYMENT_STATUS_PENDING" description="VMPAYMENT_INTELLIGENTPAYMENT_STATUS_PENDING_EXPLAIN" />
+                <field name="status_success" type="vmorderstate" scope="com_virtuemart" default="C" label="VMPAYMENT_INTELLIGENTPAYMENT_STATUS_SUCCESS" description="VMPAYMENT_INTELLIGENTPAYMENT_STATUS_SUCCESS_EXPLAIN" />
+                <field name="status_canceled" type="vmorderstate" scope="com_virtuemart" default="X" label="VMPAYMENT_INTELLIGENTPAYMENT_STATUS_FAILED" description="VMPAYMENT_INTELLIGENTPAYMENT_STATUS_FAILED_EXPLAIN" />
+                <field name="status_refunded" type="vmorderstate" scope="com_virtuemart" default="R" label="VMPAYMENT_INTELLIGENTPAYMENT_STATUS_REFUNDED" description="VMPAYMENT_INTELLIGENTPAYMENT_STATUS_REFUNDED_EXPLAIN" />
+
+				
+                <field name="tax_id" type="vmtaxes" scope="com_virtuemart"  label="VMPAYMENT_INTELLIGENTPAYMENT_TAX" description="VMPAYMENT_INTELLIGENTPAYMENT_TAX_EXPLAIN" />
+                <field name="debug" type="radio" default="0" label="VMPAYMENT_INTELLIGENTPAYMENT_DEBUG" description="VMPAYMENT_INTELLIGENTPAYMENT_DEBUG_DESC" >
+                    <option value="0">COM_VIRTUEMART_NO</option>
+                    <option value="1">COM_VIRTUEMART_YES</option>
+                </field>
+                
+				<!--
+				<field type="text" name="ipg_token_testUrl" label="VMPAYMENT_INTELLIGENTPAYMENT_TOKEN_TEST_URL" size="50" />
+				
+				<field type="text" name="ipg_token_liveUrl" label="VMPAYMENT_INTELLIGENTPAYMENT_TOKEN_LIVE_URL" size="50" />
+				
+				<field type="text" name="ipg_cashier_testUrl" label="VMPAYMENT_INTELLIGENTPAYMENT_CASHIER_TEST_URL" size="50" />
+				
+				<field type="text" name="ipg_cashier_liveUrl" label="VMPAYMENT_INTELLIGENTPAYMENT_CASHIER_LIVE_URL" size="50" />
+				
+				<field type="text" name="ipg_js_testUrl" label="VMPAYMENT_INTELLIGENTPAYMENT_JS_TEST_URL" size="50" />
+				
+				<field type="text" name="ipg_js_liveUrl" label="VMPAYMENT_INTELLIGENTPAYMENT_JS_LIVE_URL" size="50" />
+								
+				<field type="text" name="ipg_payment_testUrl" label="VMPAYMENT_INTELLIGENTPAYMENT_PAYMENT_TEST_URL" size="50" />
+				
+				<field type="text" name="ipg_payment_liveUrl" label="VMPAYMENT_INTELLIGENTPAYMENT_PAYMENT_LIVE_URL" size="50" />
+				-->
+				
+            </fieldset>
+        </fields>
+    </vmconfig>
+</extension>
